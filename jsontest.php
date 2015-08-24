@@ -32,7 +32,8 @@ $output=json_decode($output_row);
 
 //print_r($output);
 //print_r($_GET);
-echo "あなたは今、".$output->response->station['0']->line."に乗っている可能性が高いです！<br>";
+echo "あなたは今、".$output->response->station['0']->line."に乗っている可能性が高いです！<br>".PHP_EOL;
 ?>
+<span style="position:absolute;bottom:0%;width:100%;text-align:right;"><a target="_blank" href="http://express.heartrails.com/">HeartRails Expressi</a></span>
 </body>
 </html>
