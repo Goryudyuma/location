@@ -30,7 +30,7 @@ $stations_points_string=implode(",\n",$strings);
 <meta charset=utf-8>
 <title>位置情報から路線を取得するテスト。</title>
 
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDCa1AVsDR-NB-vi4xTJkQjU-AxSnG76Lw&sensor=false">
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCa1AVsDR-NB-vi4xTJkQjU-AxSnG76Lw&sensor=false">
 </script>
 
 <script type="text/javascript">
