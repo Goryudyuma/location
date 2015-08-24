@@ -1,39 +1,81 @@
-<html>
+<?php
+$output_row=file_get_contents("http://express.heartrails.com/api/json?method=getStations&x=".$_POST['x']."&y=".$_POST['y']);
+$output=json_decode($output_row);
+$line=$output->response->station['0']->line;
+
+$stations_row=file_get_contents("http://express.heartrails.com/api/json?method=getStations&line=".$line);
+$stations=json_decode($stations_row);
+
+$point_max['x']=$_POST['x'];
+$point_max['y']=$_POST['y'];
+$point_min['x']=$_POST['x'];
+$point_min['y']=$_POST['y'];
+$strings=array();
+foreach ($stations->response->station as $x) {
+	array_push($strings,"new google.maps.LatLng(".$x->y.", ".$x->x.")");
+	
+	$point_max['x']=max($point_max['x'],$x->x);
+	$point_max['y']=max($point_max['y'],$x->y);
+	$point_min['x']=min($point_min['x'],$x->x);
+	$point_min['y']=min($point_min['y'],$x->y);
+}
+$stations_points_string=implode(",\n",$strings);
+
+?>
+
+<!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset=utf-8>
 <title>位置情報から路線を取得するテスト。</title>
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDCa1AVsDR-NB-vi4xTJkQjU-AxSnG76Lw&sensor=false">
+</script>
+
+<script type="text/javascript">
+function initialize(){
+	var latlng = new google.maps.LatLng(<?=$_POST['y'].",".$_POST['x']?>);
+	var center=new google.maps.LatLng(<?=(($point_min['y']+$point_max['y'])/2).",".(($point_min['x']+$point_max['x'])/2) ?>);
+	var opts={
+		zoom:2,
+		center:latlng,
+		mapTypeId:google.maps.MapTypeId.ROADMAP
+	};
+	var map=new google.maps.Map(document.getElementById("map_canvas"),opts);
+	var ll_sw = new google.maps.LatLng(<?=$point_min['y'].",".$point_min['x']?>);
+	var ll_ne = new google.maps.LatLng(<?=$point_max['y'].",".$point_max['x']?>);
+	var latLngBounds = new google.maps.LatLngBounds(ll_sw, ll_ne);
+	map.fitBounds(latLngBounds);
+
+	var marker=new google.maps.Marker({
+		position:latlng,
+		map:map
+	});
+	var points=[
+		<?=$stations_points_string?>
+	];
+
+	var polylineOpts={
+		map:map,
+		path:points,
+		strokeColor: '#0000FF',
+		strokeWeight: 5
+	};
+	var polyline = new google.maps.Polyline(polylineOpts);
+}
+
+</script>
+
 </head>
-<body>
+<body onload="initialize()">
 <?php
-/*
-// http://qiita.com/khirose/items/870ffec6ce4562f54c9d
-$POST_DATA=array(
-	'method'=>'getStations',
-	'x'=>$_GET['x'],
-	'y'=>$_GET['y']
-);
 
-$curl=curl_init("http://express.heartrails.com/api/json");
-curl_setopt($curl,CURLOPT_POST, TRUE);
-curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($POST_DATA));
-curl_setopt($curl,CURLOPT_SSL_VERIFYPEER, FALSE);  // オレオレ証明書対策
-curl_setopt($curl,CURLOPT_SSL_VERIFYHOST, FALSE);  // 
-curl_setopt($curl,CURLOPT_RETURNTRANSFER, TRUE);
-curl_setopt($curl,CURLOPT_COOKIEJAR,      'cookie');
-curl_setopt($curl,CURLOPT_COOKIEFILE,     'tmp');
-curl_setopt($curl,CURLOPT_FOLLOWLOCATION, TRUE); // Locationヘッダを追跡
+echo "あなたは今、<b>".$line."</b>に乗っている可能性が高いです！<br>".PHP_EOL;
 
-$output_row= curl_exec($curl);
-$output=json_decode($output_row);
- */
-
-$output_row=file_get_contents("http://express.heartrails.com/api/json?method=getStations&x=".$_POST['x']."&y=".$_POST['y']);
-$output=json_decode($output_row);
-
-//print_r($output);
-//print_r($_GET);
-echo "あなたは今、".$output->response->station['0']->line."に乗っている可能性が高いです！<br>".PHP_EOL;
 ?>
+<div id="map_canvas" style="width:100%; height:100%"></div>
+
 <span style="position:absolute;bottom:0%;width:100%;text-align:right;"><a target="_blank" href="http://express.heartrails.com/">HeartRails Expressi</a></span>
 </body>
 </html>
