@@ -1,12 +1,12 @@
 application: location
-version: 3
+version: 4
 runtime: php55
 api_version: 1
 
 
 handlers:
-- url: /jsontest.php*
-  script: jsontest.php
+- url: /map.php*
+  script: map.php
 
 - url: /.*
   script: index.php

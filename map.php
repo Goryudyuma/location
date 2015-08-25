@@ -71,11 +71,13 @@ function initialize(){
 <body onload="initialize()">
 <?php
 
-echo "あなたは今、<b>".$line."</b>に乗っている可能性が高いです！<br>".PHP_EOL;
+echo "あなたは今、<b>".$line."</b>に乗っている可能性が高いです！".PHP_EOL;
 
 ?>
+<div align="center"><input type="button" onclick="location.href='index.php'" value="更新" ></div>
 <div id="map_canvas" style="width:100%; height:100%"></div>
 
 <span style="position:absolute;bottom:0%;width:100%;text-align:right;"><a target="_blank" href="http://express.heartrails.com/">HeartRails Expressi</a></span>
+
 </body>
 </html>

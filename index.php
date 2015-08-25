@@ -43,7 +43,7 @@ function jump(){
 <title>位置情報から路線を取得するテスト。</title>
 </head>
 <body>
-<form name="locate" action="./jsontest.php" method="post">
+<form name="locate" action="./map.php" method="post">
 <div id="locate"></div>
 </form>
 
