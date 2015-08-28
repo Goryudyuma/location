@@ -11,15 +11,22 @@ $point_max['y']=$_POST['y'];
 $point_min['x']=$_POST['x'];
 $point_min['y']=$_POST['y'];
 $strings=array();
+$line_num=0;
+$strings[$line_num]=array();
 foreach ($stations->response->station as $x) {
-	array_push($strings,"new google.maps.LatLng(".$x->y.", ".$x->x.")");
-	
+	array_push($strings[$line_num],"new google.maps.LatLng(".$x->y.", ".$x->x.")");
+	if ($x->next===NULL) {
+		$station_points_string[$line_num]=implode(",\n",$strings[$line_num]);
+		$line_num++;
+		$strings[$line_num]=array();
+	}	
 	$point_max['x']=max($point_max['x'],$x->x);
 	$point_max['y']=max($point_max['y'],$x->y);
 	$point_min['x']=min($point_min['x'],$x->x);
 	$point_min['y']=min($point_min['y'],$x->y);
 }
-$stations_points_string=implode(",\n",$strings);
+
+$station_points_string[$line_num]=implode(",\n",$strings[$line_num]);
 
 ?>
 
@@ -52,8 +59,12 @@ function initialize(){
 		position:latlng,
 		map:map
 	});
-	var points=[
-		<?=$stations_points_string?>
+<?php
+for ($i=0; $i <= $line_num; $i++) {
+
+	echo "
+		var points=[
+		".$station_points_string[$i]."
 	];
 
 	var polylineOpts={
@@ -63,8 +74,10 @@ function initialize(){
 		strokeWeight: 5
 	};
 	var polyline = new google.maps.Polyline(polylineOpts);
+";
 }
-
+?>
+}
 </script>
 
 </head>
