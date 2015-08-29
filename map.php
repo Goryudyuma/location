@@ -87,6 +87,11 @@ for ($i=0; $i <= $line_num; $i++) {
 echo "あなたは今、<b>".$line."</b>に乗っている可能性が高いです！".PHP_EOL;
 
 ?>
+<div align="right">
+<a href="https://twitter.com/share" class="twitter-share-button" data-text="私は今、<?=$line?>に乗っています！" data-via="Goryudyuma">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
 <div align="center"><input type="button" onclick="location.href='index.php'" value="更新" ></div>
 <div id="map_canvas" style="width:100%; height:100%"></div>
 
