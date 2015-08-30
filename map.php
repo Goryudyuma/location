@@ -1,4 +1,8 @@
 <?php
+if ($_POST['x']==""||$_POST['y']=="") {
+	header('Location: https://near-route.appspot.com');
+	exit;
+}
 $output_row=file_get_contents("http://express.heartrails.com/api/json?method=getStations&x=".$_POST['x']."&y=".$_POST['y']);
 $output=json_decode($output_row);
 $line=$output->response->station['0']->line;
@@ -37,7 +41,7 @@ $station_points_string[$line_num]=implode(",\n",$strings[$line_num]);
 <meta charset=utf-8>
 <title>位置情報から路線を取得するテスト。</title>
 
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCa1AVsDR-NB-vi4xTJkQjU-AxSnG76Lw&sensor=false">
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCa1AVsDR-NB-vi4xTJkQjU-AxSnG76Lw&sensor=false&region=JP">
 </script>
 
 <script type="text/javascript">

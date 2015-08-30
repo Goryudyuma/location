@@ -1,5 +1,5 @@
 application: location
-version: 6
+version: 7
 runtime: php55
 api_version: 1
 
